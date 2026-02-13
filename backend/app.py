@@ -149,10 +149,22 @@ def analyze_farm():
         lat = data.get('lat', 0)
         
         # --- PHASE 1: SATELLITE IMAGE ACQUISITION ---
-        # Simulation: Lat > 15 = Good Farm, Lat < 15 = Bad Farm
-        print("[System] Querying Sentinel-2 Satellite Archives...")
-        target_image = SUCCESS_IMAGE_PATH if lat > 15 else FAILURE_IMAGE_PATH
+        # DEMO LOGIC: 
+        # Dry Farm: 28.383767, 72.825569 -> Triggers FAILURE Image
+        # Healthy Farm: 31.013800, 75.151049 -> Triggers SUCCESS Image
         
+        print(f"[System] Analyzing coordinates: {lat}, {data.get('lng')}")
+
+        # We use a small range (tolerance) so you don't have to click the *exact* pixel
+        if lat > 30.0: 
+            # Matches your Healthy Farm (31.01...)
+            print("[System] Detected HEALTHY FARM region (Punjab). Loading lush vegetation data...")
+            target_image = SUCCESS_IMAGE_PATH
+        else:
+            # Matches your Dry Farm (28.38...)
+            print("[System] Detected DRY FARM region (Rajasthan/Haryana border). Loading arid soil data...")
+            target_image = FAILURE_IMAGE_PATH
+
         # --- PHASE 2: AI ANALYSIS ---
         print("[ML] Running K-Means Clustering...")
         coverage, ndvi, soil = run_computer_vision_analysis(target_image)
