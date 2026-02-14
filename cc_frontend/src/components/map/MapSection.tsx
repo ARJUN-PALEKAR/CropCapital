@@ -1,10 +1,9 @@
 'use client';
 
-import { useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { Loader2, Satellite } from 'lucide-react';
 
-const LeafletMap = dynamic(() => import('./LeafletMap'), { 
+const LeafletMap = dynamic(() => import('@/src/components/map/LeafletMap'), { 
   ssr: false,
   loading: () => (
     <div className="h-full w-full bg-gradient-to-br from-slate-100 to-slate-200 flex flex-col items-center justify-center text-slate-500">
@@ -50,8 +49,8 @@ export default function MapSection({ targetLocation, isScanning }: MapSectionPro
                 <div className="relative w-12 h-12 mb-4 mx-auto">
                   <Loader2 className="w-12 h-12 text-emerald-600 animate-spin" />
                 </div>
-                <h3 className="text-slate-900 font-bold text-lg mb-1">Analyzing Terrain</h3>
-                <p className="text-sm text-slate-600">Satellite data processing...</p>
+                <h3 className="text-slate-900 font-bold text-lg mb-1">Processing Imagery</h3>
+                <p className="text-sm text-slate-600">Analyzing spectral data...</p>
                 <div className="mt-4 flex gap-1 justify-center">
                   <div className="w-1 h-1 rounded-full bg-emerald-600 animate-[bounce_1.5s_infinite]" />
                   <div className="w-1 h-1 rounded-full bg-emerald-600 animate-[bounce_1.5s_infinite] delay-100" />
@@ -64,16 +63,16 @@ export default function MapSection({ targetLocation, isScanning }: MapSectionPro
       )}
 
       {/* STATUS BADGE - Bottom Left */}
-      {!isScanning && (
+      {!isScanning && targetLocation && (
         <div className="absolute bottom-4 left-4 z-30 bg-white/95 backdrop-blur-md border border-white/50 rounded-lg px-4 py-2 shadow-lg animate-in fade-in slide-in-from-bottom-2">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             <p className="text-xs font-mono text-slate-700">
-              <span className="text-slate-500">SAT: </span>
-              <span className="font-bold text-slate-900">SENTINEL-2</span>
+              <span className="text-slate-500">LAT/LON: </span>
+              <span className="font-bold text-slate-900">{targetLocation.lat.toFixed(4)}, {targetLocation.lng.toFixed(4)}</span>
             </p>
             <span className="text-slate-300 text-xs">•</span>
-            <p className="text-xs font-mono text-emerald-600 font-bold">LIVE</p>
+            <p className="text-xs font-mono text-emerald-600 font-bold">SENTINEL-2 LIVE</p>
           </div>
         </div>
       )}

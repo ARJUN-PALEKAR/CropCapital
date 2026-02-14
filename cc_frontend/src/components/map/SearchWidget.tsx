@@ -1,23 +1,19 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Search, MapPin, Navigation } from 'lucide-react';
+import { Search } from 'lucide-react';
 
 interface SearchWidgetProps {
   onSearch: (lat: string, lng: string) => void;
+  isLoading: boolean;
 }
 
-export function SearchWidget({ onSearch }: SearchWidgetProps) {
-  const [latitude, setLatitude] = useState('20.5937');
-  const [longitude, setLongitude] = useState('78.9629');
-  const [isSearching, setIsSearching] = useState(false);
+export function SearchWidget({ onSearch, isLoading }: SearchWidgetProps) {
+  const [latitude, setLatitude] = useState('30.902'); // Defaults to Punjab (Wheat belt)
+  const [longitude, setLongitude] = useState('75.821');
 
   const handleSearch = () => {
-    setIsSearching(true);
-    setTimeout(() => {
-      onSearch(latitude, longitude);
-      setIsSearching(false);
-    }, 500);
+    onSearch(latitude, longitude);
   };
 
   return (
@@ -25,7 +21,7 @@ export function SearchWidget({ onSearch }: SearchWidgetProps) {
         
         {/* Label / Brand */}
         <div className="hidden md:flex items-center gap-2 px-3 border-r border-slate-100">
-            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <div className={`w-2 h-2 rounded-full ${isLoading ? 'bg-amber-500' : 'bg-emerald-500'} animate-pulse`} />
             <span className="text-sm font-bold text-slate-700 tracking-wide uppercase">Mission Control</span>
         </div>
 
@@ -39,7 +35,7 @@ export function SearchWidget({ onSearch }: SearchWidgetProps) {
                     value={latitude}
                     onChange={(e) => setLatitude(e.target.value)}
                     className="bg-transparent border-none outline-none text-sm font-mono font-medium text-slate-900 w-full"
-                    placeholder="20.5937"
+                    placeholder="30.902"
                 />
             </div>
 
@@ -51,7 +47,7 @@ export function SearchWidget({ onSearch }: SearchWidgetProps) {
                     value={longitude}
                     onChange={(e) => setLongitude(e.target.value)}
                     className="bg-transparent border-none outline-none text-sm font-mono font-medium text-slate-900 w-full"
-                    placeholder="78.9629"
+                    placeholder="75.821"
                 />
             </div>
         </div>
@@ -59,11 +55,11 @@ export function SearchWidget({ onSearch }: SearchWidgetProps) {
         {/* Search Button */}
         <button 
             onClick={handleSearch}
-            disabled={isSearching}
+            disabled={isLoading}
             className="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2.5 rounded-lg font-bold text-sm shadow-lg shadow-emerald-200 flex items-center gap-2 transition-transform active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed"
         >
-            {isSearching ? <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" /> : <Search size={16} />}
-            {isSearching ? 'Scanning...' : 'Analyze Terrain'}
+            {isLoading ? <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" /> : <Search size={16} />}
+            {isLoading ? 'Scanning...' : 'Analyze'}
         </button>
 
     </div>
