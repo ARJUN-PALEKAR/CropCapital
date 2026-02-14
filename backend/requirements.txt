@@ -1,1 +1,0 @@
-flask flask-cors opencv-python numpy scikit-learn
